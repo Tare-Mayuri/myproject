@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content=
+		"width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="../assets/css/bubble.css">
+</head>
+
+<body>
+
+	<nav>
+		<center>
+	<table>
+		<tr>
+		
+		<td><b style="background-color: white";
+			color: black;
+			padding: 10px;
+			font-size: 16px;
+			width: : 200px;
+			height:  100px;
+			border-radius: 5px;
+			font-size: 20px;>SIZE  
+		<select id="num">
+		<option value="">Select size</option>
+		
+		<option value="10">10</option>
+		<option value="20">20</option>
+		<option value="30">30</option>
+		<option value="40">40</option>
+		<option value="50">50</option>
+		<option value="60">60</option>
+		
+		
+		
+		</select>
+		<style>
+			nav {
+	background: #4682B4;
+	height: 70px;
+	width: 100%;
+	 }
+			</style>
+		</b></td> 
+		
+		
+		<td><b style="background-color: white";
+			color: black;
+			padding: 10px;
+			font-size: 16px;
+			width: : 200px;
+			height :  100px;
+			border-radius: 5px;
+			font-size: 20px;>SPEED<input type="range" min="1" max="1000"	 id="speed" value="200"></b></td>
+		
+		
+		<td><button  style="color: black";
+			border: 2px solid rgb(216, 2, 134);
+			border-radius: 0px;
+			padding: 18px 36px;
+			display: inline-block;
+			font-family: Lucida Console, Monaco,     monospace;
+			font-size: 14px;
+			letter-spacing: 1px;
+			cursor: pointer;
+			box-shadow: inset 0 0 0 0 #4682B4;
+			-webkit-transition: ease-out 0.4s;
+			-moz-transition: ease-out 0.4s;
+			 transition: ease-out 0.4s;  
+			box-shadow: inset 0 100px 0 0 #4682B4; type="submit" id="button1" style="width: 120%;">START</button></td>
+		<td></td>
+		
+		
+		<td><button  style="color: black";
+			border: 2px solid rgb(218, 2, 134);
+			border-radius: 0px;
+			padding: 18px 36px;
+			display: inline-block;
+			font-family: Lucida Console, Monaco,     monospace;
+			font-size: 14px;
+			letter-spacing: 1px;
+			cursor: pointer;
+			box-shadow: inset 0 0 0 0 #D80286;
+			-webkit-transition: ease-out 0.4s;
+			-moz-transition: ease-out 0.4s;
+			 transition: ease-out 0.4s;  
+			box-shadow: inset 0 100px 0 0 #D80286; onclick="refresh()" id="button2" style="width: 120%;">REGENERATE</button></td>
+			<td>
+				<td>
+				<td>
+				<td>
+				<td>
+				<a class="back" href="Index.html"><b>HOME</b></a>
+				</td>
+				</td>
+				</td>
+				</td>
+				</td>
+						
+		
+		</tr>
+		</table>
+	</center>	
+	
+	<div id="array"></div>
+	<script>
+		var container = document.getElementById("array");
+// Function to generate the array of blocks
+var flag2=0;
+function generatearray() {
+	for (var i = 0; i < 40; i++) {
+		// Return a value from 1 to 100 (both inclusive)
+		var value = Math.ceil(Math.random() * 100);
+
+		// Creating element div
+		var array_ele = document.createElement("div");
+
+		// Adding class 'block' to div
+		array_ele.classList.add("block");
+
+		// Adding style to div
+		array_ele.style.height = `${value * 3}px`;
+		array_ele.style.transform = `translate(${i * 30}px)`;
+
+		// Creating label element for displaying
+		// size of particular block
+		var array_ele_label = document.createElement("label");
+		array_ele_label.classList.add("block_id");
+		array_ele_label.innerText = value;
+
+		// Appending created elements to index.html
+		array_ele.appendChild(array_ele_label);
+		container.appendChild(array_ele);
+	}
+}
+// Promise to swap two blocks
+function swap(el1, el2) {
+	return new Promise((resolve) => {
+
+		// For exchanging styles of two blocks
+		var temp = el1.style.transform;
+		el1.style.transform = el2.style.transform;
+		el2.style.transform = temp;
+
+		window.requestAnimationFrame(function() {
+
+			// For waiting for .25 sec
+			setTimeout(() => {
+				container.insertBefore(el2, el1);
+				resolve();
+			}, 250);
+		});
+	});
+}
+
+// Asynchronous BubbleSort function
+async function BubbleSort(delay = speed) {
+	var blocks = document.querySelectorAll(".block");
+
+	// BubbleSort Algorithm
+	for (var i = 0; i < blocks.length; i += 1) {
+		for (var j = 0; j < blocks.length - i - 1; j += 1) {
+                    if(flag==1)return;
+			// To change background-color of the
+			// blocks to be compared
+			blocks[j].style.backgroundColor = "#FF4949";
+			blocks[j + 1].style.backgroundColor = "#FF4949";
+
+			// To wait for .1 sec
+			await new Promise((resolve) =>
+				setTimeout(() => {
+					resolve();
+				}, delay)
+			);
+
+			console.log("run");
+			var value1 = Number(blocks[j].childNodes[0].innerHTML);
+			var value2 = Number(blocks[j + 1]
+						.childNodes[0].innerHTML);
+
+			// To compare value of two blocks
+			if (value1 > value2) {
+				await swap(blocks[j], blocks[j + 1]);
+				blocks = document.querySelectorAll(".block");
+			}
+
+			// Changing the color to the previous one
+			blocks[j].style.backgroundColor = "#6b5b95";
+			blocks[j + 1].style.backgroundColor = "#6b5b95";
+		}
+
+		//changing the color of greatest element
+		//found in the above traversal
+		blocks[blocks.length - i - 1]
+				.style.backgroundColor = "#13CE66";
+	}
+}
+
+// Calling generatearray function
+generatearray();
+
+function stop()
+{
+flag=1;
+}
+
+const btn = document.querySelector("button");
+btn.addEventListener("click", start);
+
+function start()
+{
+flag=0;
+updateBtn();
+function updateBtn() {
+    if (btn.textContent === "START") {
+        btn.textContent = "STOP";
+		BubbleSort();
+    } else {
+        btn.textContent = "START";
+		stop();
+    }
+}
+
+}
+function refresh()
+{
+	window.location.reload();
+
+}
+
+// Calling BubbleSort function
+//BubbleSort();
+
+	</script>
+	<br>
+	</div>	
+	</nav>>
+</body>
+
+</html>
